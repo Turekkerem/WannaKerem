@@ -116,7 +116,7 @@ The catch? This derivative completely lacks `SecureBuffer` and any RSA key wrapp
 ---
 
 ## Disclaimer
-
+[WARNING]
 > This code is strictly for **educational, academic, and authorized Red/Blue team training** inside **isolated virtual machines** with network adapters disabled and snapshots enabled.
 >
 > It does not propagate over networks, does not exploit any vulnerabilities, and contains built-in safeguards (`marker.dat`, memory protection) to prevent accidental damage.
