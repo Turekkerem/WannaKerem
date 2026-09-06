@@ -4,7 +4,7 @@ Let's be real – the WannaCry outbreak in 2017 was one of those rare moments th
 
 Funny enough, my own personal machine got hit by WannaCry back then. Luckily, an active AV caught it just in time before it could do serious harm – but that creepy skull dialog and the ticking ransom timer stuck with me. So, I decided to build my own take on it: **Wannakerem**.
 
-It's a purely academic, de-weaponized PoC that mimics the visual flair and cryptographic backbone of WannaCry, without any of the worm-like propagation or real-world malicious intent. Think of it as a respectful (and slightly nostalgic) reverse-engineering deep-dive.
+It's a purely academic (but still weaponized) PoC that mimics the visual flair and cryptographic backbone of WannaCry, without any of the worm-like propagation or real-world malicious intent. Think of it as a respectful (and slightly nostalgic) reverse-engineering deep-dive.
 
 ---
 
