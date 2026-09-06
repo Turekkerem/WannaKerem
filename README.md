@@ -4,7 +4,7 @@ Let's be real – the WannaCry outbreak in 2017 was one of those rare moments th
 
 Funny enough, my own personal machine got hit by WannaCry back then. Luckily, an active AV caught it just in time before it could do serious harm – but that creepy skull dialog and the ticking ransom timer stuck with me. So, I decided to build my own take on it: **Wannakerem**.
 
-It's a purely academic, de-weaponized PoC that mimics the visual flair and cryptographic backbone of WannaCry, without any of the worm-like propagation or real-world malicious intent. Think of it as a respectful (and slightly nostalgic) reverse-engineering deep-dive.
+It's a purely academic (but still weaponized) PoC that mimics the visual flair and cryptographic backbone of WannaCry, without any of the worm-like propagation or real-world malicious intent. Think of it as a respectful (and slightly nostalgic) reverse-engineering deep-dive.
 
 ---
 
@@ -49,7 +49,7 @@ Here's the unfiltered truth:
 
 So, if you're planning to test the full "pay the ransom and get your files back" flow, you're going to end up frustrated (or convinced you've mistyped the key about fifty times).
 
-**Now for the plot twist:** The completely different, deprecated sibling living in `old_very_cryptographically_depreciated` – the one using **AES-CBC with a user-supplied password** – works flawlessly. Encrypt? Yes. Decrypt? Absolutely. Accepts literally any password you throw at it? No,but you are surprised
+**Now for the plot twist:** The completely different, deprecated sibling living in `old_very_cryptographically_insecure` – the one using **AES-CBC with a user-supplied password** – works flawlessly. Encrypt? Yes. Decrypt? Absolutely. Accepts literally any password you throw at it? No,but you are surprised
 
 Why? Because that version has none of the `SecureBuffer` / hex-conversion complexity. It takes your plaintext password, derives a key, and just does its job without overthinking it. No RSA wrapping, no memory locking, no SHA‑256 gatekeeping – just straightforward, slightly old‑school file encryption.
 
@@ -62,6 +62,11 @@ The takeaway? This main branch is a fascinating but **intentionally fragile** ge
 I'll be honest – the visual part was the most fun. Wannakerem changes the desktop wallpaper to the classic **"YOUR FILES HAS BEEN ENCRYPTED"** screen, spawns dialog windows reminiscent of the original WannaCry UI, and includes a ticking timer for dramatic effect.
 
 The floating skulls and creepy vibe? That's heavily inspired by **"Welcome to the Game 2"** – a game that absolutely nails the aesthetic of old-school dark-web hacking. I've always loved that atmosphere, and mashing it up with this cryptographic PoC just felt right.
+<img width="998" height="705" alt="image" src="https://github.com/user-attachments/assets/c1fe6dc0-70b8-4825-bca4-456e158d820e" />
+<img width="1017" height="698" alt="image" src="https://github.com/user-attachments/assets/7243a514-fd81-4e1c-9613-0bc2a2c44914" />
+<img width="1013" height="706" alt="image" src="https://github.com/user-attachments/assets/898b6aea-56cf-40cf-89d4-1c7ddd9d2bbf" />
+
+
 
 ---
 
@@ -112,13 +117,28 @@ The catch? This derivative completely lacks `SecureBuffer` and any RSA key wrapp
 
 ---
 
-## Disclaimer
+## Disclaimer – Read This Before Even Thinking About Running It
 
-> This code is strictly for **educational, academic, and authorized Red/Blue team training** inside **isolated virtual machines** with network adapters disabled and snapshots enabled.
+> [!CAUTION]
+> **EXTREME DANGER: THIS CODE SIMULATES RANSOMWARE BEHAVIOR.**
 >
-> It does not propagate over networks, does not exploit any vulnerabilities, and contains built-in safeguards (`marker.dat`, memory protection) to prevent accidental damage.
+> This project is intentionally designed to mimic real-world file-encrypting malware. Even with built-in killswitches and safeguards (like `marker.dat` and `SecureBuffer`), the core logic interacts directly with the file system, modifies desktop wallpapers, and attempts cryptographic operations that can permanently alter data if something goes wrong.
 >
-> The author does not condone or support the use of this software outside of controlled laboratory environments. You are responsible for how you use this code.
+> **YOU ARE SOLELY RESPONSIBLE FOR YOUR ACTIONS.**
+>
+> - **Authorized Environments ONLY:** You are explicitly permitted to run this code **exclusively** on hardware and operating systems that you **legally own** and have **explicit written consent** to test. If you are a student, this means *your personal lab machine only* – not university computers, not shared workstations, not your friend's laptop.
+>
+> - **Virtual Machines Are MANDATORY:** Do **NOT** run this on your daily-driver host machine, physical hardware, or any system connected to a production or home network. Use **isolated virtual machines** (VMware, VirtualBox, Hyper‑V) with **no network adapters enabled** and a **restored snapshot** ready for every execution.
+>
+> - **Backup EVERYTHING:** Even though multiple safety mechanisms exist, bugs happen. A single logic error could bypass the killswitches. Always take a full snapshot of your VM *before* executing the binary. Assume that your test files will be lost forever.
+>
+> - **Antivirus & EDR Will Go Ballistic:** Windows Defender, CrowdStrike, SentinelOne, or any modern EDR will immediately flag, quarantine, or delete this binary. This is expected behavior. If you are testing in a corporate environment without explicit written authorization, **you will trigger a security incident**.
+>
+> - **Legal Liability:** If you run this on a school, work, government, or shared computer without explicit, signed authorization, you are committing a **felony** under the Computer Fraud and Abuse Act (CFAA) in the US, the Computer Misuse Act in the UK, and similar international laws. The author assumes **ZERO liability** for any data loss, hardware damage, system instability, legal prosecution, or career destruction resulting from the misuse of this software.
+>
+> **If you do not fully understand these warnings or lack the technical expertise to safely contain this code in an isolated sandbox, DO NOT DOWNLOAD, COMPILE, OR EXECUTE IT.**
+>
+> *This repository exists for academic research and Red/Blue team training only. If you are here to cause harm, you are in the wrong place.*
 
 ---
 
