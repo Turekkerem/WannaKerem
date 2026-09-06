@@ -154,3 +154,33 @@ This project isn't just "another ransomware PoC" – it demonstrates:
 It's professional, it's quirky, and it proves you actually know your stuff beyond just running Metasploit modules.
 
 Happy hacking – and keep those snapshots ready.
+
+
+
+---
+
+## Anti-Script-Kiddie Killswitches – The "Dumb" Layer
+
+I deliberately kept these out of the main technical deep-dive because, honestly, they're a bit embarrassing – but they're also my favorite part of the project.
+
+You see, I've been around long enough to know that people *will* fork this repo. Some will be curious researchers. Others will be script kiddies looking for a quick "tool" to cause chaos. I wanted to make sure the second group hits a wall – not a cryptographic wall, but a **stupidity wall**.
+
+So, scattered across the codebase like little digital landmines, you'll find:
+
+- A **deliberate typo** – one single character mismatch in a function call that breaks compilation unless you actually read the error log and fix it.
+- An **`if(0)`** guard – wrapping an entire critical execution path. Won't run unless you notice it and change it to `if(1)`.
+- A **`while(0)`** loop – surrounding a key initialization block. Guess what? It runs zero times.
+- And my personal favorite: **`BUFFER_SIZE - BUFFER_SIZE`** – which evaluates to a perfect, beautiful zero. Used as an offset, a divisor, or a loop condition in just the right spot to silently crash the program or skip the payload entirely.
+
+### Are these killswitches *enough*?
+
+Technically? **Absolutely not.**
+
+Any junior developer with a debugger, a set of eyes, and ten minutes of patience will spot these, laugh, and bypass them all. They're not security measures – they're **annoyance filters**.
+
+But here's the thing: script kiddies don't read code. They copy-paste, hit compile, and pray. When the compilation fails with some cryptic error, or the program runs but does absolutely nothing, they'll get frustrated, blame the "broken code," and move on to the next shiny repo.
+
+Is that bulletproof? No. But it's exactly the right level of paranoid for an academic PoC. It stops the lazy abusers without pretending to be Fort Knox. And honestly? I sleep better knowing that if someone manages to weaponize this mess, they at least had to *read my code* to do it – which means they probably learned something along the way.
+
+So yes – dumb, trivial, and completely bypassable. But for 90% of drive-by downloads, they're a surprisingly effective gatekeeper.
+

