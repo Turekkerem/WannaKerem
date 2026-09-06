@@ -92,9 +92,9 @@ The source is split into logical modules to keep things maintainable:
 The project builds on Windows using **MinGW** (or MSVC with adjustments). You'll need OpenSSL libraries linked properly.
 
 **Full build command (tested and working):**
-bash
+
 ```
-`g++ -std=c++17 -O2 -IModules Modules/asymmetric.cpp Modules/symmetric.cpp Modules/other_functions.cpp Modules/visual.cpp ransomware.cpp resource.res -mwindows -lcrypto -lssl -Wdeprecated-declarations -lws2_32 -lgdi32 -lcrypt32 -lshlwapi -lstdc++fs -lole32 -lshell32 -luuid -lwinmm -static -o ransomware.exe`
+g++ -std=c++17 -O2 -IModules Modules/asymmetric.cpp Modules/symmetric.cpp Modules/other_functions.cpp Modules/visual.cpp ransomware.cpp resource.res -mwindows -lcrypto -lssl -Wdeprecated-declarations -lws2_32 -lgdi32 -lcrypt32 -lshlwapi -lstdc++fs -lole32 -lshell32 -luuid -lwinmm -static -o ransomware.exe
 ```
 
 **Optional audio support (resource file):**  
