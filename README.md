@@ -182,5 +182,9 @@ But here's the thing: script kiddies don't read code. They copy-paste, hit compi
 
 Is that bulletproof? No. But it's exactly the right level of paranoid for an academic PoC. It stops the lazy abusers without pretending to be Fort Knox. And honestly? I sleep better knowing that if someone manages to weaponize this mess, they at least had to *read my code* to do it – which means they probably learned something along the way.
 
+<blockquote>
+Maybe it's not the perfect solution, but it's far more interesting – and educational – for that person than a plain copy-paste ever would be.
+</blockquote>
+
 So yes – dumb, trivial, and completely bypassable. But for 90% of drive-by downloads, they're a surprisingly effective gatekeeper.
 
