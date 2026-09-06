@@ -65,6 +65,7 @@ The floating skulls and creepy vibe? That's heavily inspired by **"Welcome to th
 <img width="998" height="705" alt="image" src="https://github.com/user-attachments/assets/c1fe6dc0-70b8-4825-bca4-456e158d820e" />
 <img width="1017" height="698" alt="image" src="https://github.com/user-attachments/assets/7243a514-fd81-4e1c-9613-0bc2a2c44914" />
 <img width="1013" height="706" alt="image" src="https://github.com/user-attachments/assets/898b6aea-56cf-40cf-89d4-1c7ddd9d2bbf" />
+<img width="787" height="488" alt="image" src="https://github.com/user-attachments/assets/a399ded7-0c43-440a-bf11-951eb755edd6" />
 
 
 
