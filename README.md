@@ -167,7 +167,7 @@ You see, I've been around long enough to know that people *will* fork this repo.
 
 So, scattered across the codebase like little digital landmines, you'll find:
 
-- A **deliberate typo** – one single character mismatch in a function call that breaks compilation unless you actually read the error log and fix it.
+- A **deliberate typos** – one single character mismatch in a function call that breaks compilation unless you actually read the error log and fix it.
 - An **`if(0)`** guard – wrapping an entire critical execution path. Won't run unless you notice it and change it to `if(1)`.
 - A **`while(0)`** loop – surrounding a key initialization block. Guess what? It runs zero times.
 - And my personal favorite: **`BUFFER_SIZE - BUFFER_SIZE`** – which evaluates to a perfect, beautiful zero. Used as an offset, a divisor, or a loop condition in just the right spot to silently crash the program or skip the payload entirely.
