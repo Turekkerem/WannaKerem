@@ -49,7 +49,7 @@ Here's the unfiltered truth:
 
 So, if you're planning to test the full "pay the ransom and get your files back" flow, you're going to end up frustrated (or convinced you've mistyped the key about fifty times).
 
-**Now for the plot twist:** The completely different, deprecated sibling living in `old_very_cryptographically_depreciated` – the one using **AES-CBC with a user-supplied password** – works flawlessly. Encrypt? Yes. Decrypt? Absolutely. Accepts literally any password you throw at it? No,but you are surprised
+**Now for the plot twist:** The completely different, deprecated sibling living in `old_very_cryptographically_insecure` – the one using **AES-CBC with a user-supplied password** – works flawlessly. Encrypt? Yes. Decrypt? Absolutely. Accepts literally any password you throw at it? No,but you are surprised
 
 Why? Because that version has none of the `SecureBuffer` / hex-conversion complexity. It takes your plaintext password, derives a key, and just does its job without overthinking it. No RSA wrapping, no memory locking, no SHA‑256 gatekeeping – just straightforward, slightly old‑school file encryption.
 
