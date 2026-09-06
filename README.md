@@ -104,6 +104,12 @@ If you want the laugh effects, make sure `resource.res` is compiled and placed i
 
 ---
 
+>[!TIP]
+> I know that virtual machine and all that stuff but if you are new...
+> REMEMBER TO MAKE A SNAPSHOT
+
+---
+
 ## Bonus: Legacy Module – `old_very_cryptographically_insecure`
 
 Alright, let's address the elephant in the repo. There's a folder called `old_very_cryptographically_insecure` – and yes, that name is intentionally dramatic.
