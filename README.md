@@ -38,22 +38,23 @@ On startup, the program checks for this marker. If it exists, the encryption rou
 
 ---
 
-## Known Limitations – Honest Confession Time
+## Known Limitations – Confession Time (Now Fixed!)
 
-Let's address the elephant in the room: **the main AES-GCM branch is a bit... temperamental.**
+Let's address the elephant in the room – or rather, the ghost that *used* to be here.
 
-Here's the unfiltered truth:
+Previously, the main AES-GCM branch had a frustrating, head‑scratching bug. The encryption part worked beautifully – files got scrambled, the skull appeared, the marker dropped. But **decryption?** It would mark **every single key you entered as invalid** – even if you copied it directly from `masterkey.sha256` and triple‑checked every hex character.
 
-- The encryption part works perfectly. Files get scrambled, markers get dropped, the skull shows up. 
-- **Decryption, however, hits a wall.** Due to a subtle but annoying bug in how `SecureBuffer` hands off the Master Key to the hex conversion routine (and the subsequent SHA‑256 validation), the program will mark **every single key you enter as invalid** – even if you copy it directly from `masterkey.sha256`. The GCM side of things technically *can* decrypt, but the validation gatekeeper refuses to let you through.
+I spent way too long blaming `SecureBuffer`, the hex conversion, the SHA‑256 validation – all the usual suspects. Spoiler: it wasn't any of them.
 
-So, if you're planning to test the full "pay the ransom and get your files back" flow, you're going to end up frustrated (or convinced you've mistyped the key about fifty times).
+**The real culprit?** A small, innocent‑looking utility function designed to move desktop items out of the way during the "ransomware" simulation. It was **relocating the `masterkey.enc` and `masterkey.sha256` files** from the user's Desktop into a subfolder *on* the Desktop. When the decryption logic went looking for them at the expected root path, it found absolutely nothing – so it assumed the key was missing, corrupted, or invalid, and rejected every attempt.
 
-**Now for the plot twist:** The completely different, deprecated sibling living in `old_very_cryptographically_insecure` – the one using **AES-CBC with a user-supplied password** – works flawlessly. Encrypt? Yes. Decrypt? Absolutely. Accepts literally any password you throw at it? No,but you are surprised
+Classic "I moved the keys and forgot where I put them" – but in code.
 
-Why? Because that version has none of the `SecureBuffer` / hex-conversion complexity. It takes your plaintext password, derives a key, and just does its job without overthinking it. No RSA wrapping, no memory locking, no SHA‑256 gatekeeping – just straightforward, slightly old‑school file encryption.
+**The good news:** The bug has been squashed. Both files now stay exactly where they belong. The validation flow works, the SHA‑256 check passes, and the AES‑GCM decryption runs exactly as intended. Enter the correct key, and your files are restored. No drama, no frustration, no fifty‑tries‑before‑giving‑up.
 
-The takeaway? This main branch is a fascinating but **intentionally fragile** gem. It shows you *how* ransomware architects think (GCM, RSA wrapping, memory protection), but also proves that even smart ideas can break at the plumbing level. Treat it as a brain-teaser for reverse engineers and a cautionary tale about over‑engineering validation flows.
+So, if you're testing the full "recover your files" flow – **everything now works as originally designed**. Encrypt, decrypt, rinse, repeat. The deprecated `old_very_cryptographically_insecure` CBC variant is still there if you're curious about how the project evolved, but it's no longer the "backup plan" for working decryption. The main branch has you covered.
+
+Consider this a lesson in checking your file paths before blaming the cryptography.
 
 ---
 
