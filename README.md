@@ -48,13 +48,10 @@ I spent way too long blaming `SecureBuffer`, the hex conversion, the SHA‑256 v
 
 **The real culprit?** A small, innocent‑looking utility function designed to move desktop items out of the way during the "ransomware" simulation. It was **relocating the `masterkey.enc` and `masterkey.sha256` files** from the user's Desktop into a subfolder *on* the Desktop. When the decryption logic went looking for them at the expected root path, it found absolutely nothing – so it assumed the key was missing, corrupted, or invalid, and rejected every attempt.
 
-<div style="background-color: #1e1e1e; border-left: 4px solid #ffd93d; padding: 12px 18px; border-radius: 4px; margin: 16px 0;">
-<p style="font-size: 1.05em; font-weight: bold; margin: 0 0 8px 0;">The Fix (How Two Lines Changed Everything):</p>
-<ul style="margin: 4px 0 4px 20px; padding: 0; line-height: 1.8;">
-<li><strong>First,</strong> move all desktop items into the subfolder (the "cleanup" step).</li>
-<li><strong>Then,</strong> generate <code>masterkey.sha256</code> and <code>masterkey.enc</code> on the Desktop.</li>
-</ul>
-</div>
+> [!NOTE]
+> **The Fix (How Two Lines Changed Everything):**
+> - **First,** move all desktop items into the subfolder (the "cleanup" step).
+> - **Then,** generate `masterkey.sha256` and `masterkey.enc` on the Desktop.
 
 
 **The good news:** The bug has been squashed. Both files now stay exactly where they belong. The validation flow works, the SHA‑256 check passes, and the AES‑GCM decryption runs exactly as intended. Enter the correct key, and your files are restored. No drama, no frustration, no fifty‑tries‑before‑giving‑up.
