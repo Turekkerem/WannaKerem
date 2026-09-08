@@ -72,6 +72,7 @@ The floating skulls and creepy vibe? That's heavily inspired by **"Welcome to th
 
 As the "traditional" ransomware would do there is passive-aggressive note for the victim.
 I am so sorry for swears in it but that's how scareware-side of the ransomware does.
+
 ---
 <img width="998" height="705" alt="image" src="https://github.com/user-attachments/assets/c1fe6dc0-70b8-4825-bca4-456e158d820e" />
 <img width="1017" height="698" alt="image" src="https://github.com/user-attachments/assets/7243a514-fd81-4e1c-9613-0bc2a2c44914" />
