@@ -60,6 +60,8 @@ So, if you're testing the full "recover your files" flow – **everything now wo
 
 Consider this a lesson in checking your file paths before blaming the cryptography.
 
+I know that there is a SHA256(key) that potential victim could just crack but it would me hard like really hard,so there is potential surface of attack but as far as I am concerned there is no way in our century to crack SHA256 od 256-bit key. So there is a cryptographical gap but in my opinion it is not much of a vulnerability. The hash let me check if the key is correct with much less complicated code as it would be without it.
+
 ---
 
 ## Visuals & Atmosphere – A Nod to the Old School
@@ -67,6 +69,10 @@ Consider this a lesson in checking your file paths before blaming the cryptograp
 I'll be honest – the visual part was the most fun. Wannakerem changes the desktop wallpaper to the classic **"YOUR FILES HAS BEEN ENCRYPTED"** screen, spawns dialog windows reminiscent of the original WannaCry UI, and includes a ticking timer for dramatic effect.
 
 The floating skulls and creepy vibe? That's heavily inspired by **"Welcome to the Game 2"** – a game that absolutely nails the aesthetic of old-school dark-web hacking. I've always loved that atmosphere, and mashing it up with this cryptographic PoC just felt right.
+
+As the "traditional" ransomware would do there is passive-aggressive note for the victim.
+I am so sorry for swears in it but that's how scareware-side of the ransomware does.
+---
 <img width="998" height="705" alt="image" src="https://github.com/user-attachments/assets/c1fe6dc0-70b8-4825-bca4-456e158d820e" />
 <img width="1017" height="698" alt="image" src="https://github.com/user-attachments/assets/7243a514-fd81-4e1c-9613-0bc2a2c44914" />
 <img width="1013" height="706" alt="image" src="https://github.com/user-attachments/assets/898b6aea-56cf-40cf-89d4-1c7ddd9d2bbf" />
