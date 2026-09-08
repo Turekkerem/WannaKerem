@@ -54,7 +54,6 @@ I spent way too long blaming `SecureBuffer`, the hex conversion, the SHA‑256 v
 <li><strong>First,</strong> move all desktop items into the subfolder (the "cleanup" step).</li>
 <li><strong>Then,</strong> generate <code>masterkey.sha256</code> and <code>masterkey.enc</code> on the Desktop.</li>
 </ul>
-<p style="font-size: 0.01em; font-style: italic; margin: 6px 0 0 0; color: #aaa;">heh. Sometimes the smallest things have the biggest impact.</p>
 </div>
 
 
