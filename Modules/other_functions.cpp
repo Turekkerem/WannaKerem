@@ -132,15 +132,37 @@ void DebugWriteHex(const std::string& hex, const std::wstring& path) {
     }
 }
 
-static std::vector<uint8_t> ComputeSha256(const std::vector<uint8_t>& data) {
+static std::vector<uint8_t> ComputeSha256(const uint8_t* data, size_t size) {
     std::vector<uint8_t> hash(SHA256_DIGEST_LENGTH);
     SHA256_CTX ctx;
     SHA256_Init(&ctx);
-    SHA256_Update(&ctx, data.data(), data.size());
+    SHA256_Update(&ctx, data, size);
     SHA256_Final(hash.data(), &ctx);
     return hash;
 }
 
+int CheckKeyValidityDebug(const SecureBuffer& key, const std::wstring& hashPath) {
+    if (key.size() != AES_256_KEY_SIZE) 
+        return -1; 
+
+    std::vector<uint8_t> computedHash(SHA256_DIGEST_LENGTH);
+    SHA256_CTX ctx;
+    SHA256_Init(&ctx);
+    SHA256_Update(&ctx, key.data(), key.size());
+    SHA256_Final(computedHash.data(), &ctx);
+
+    std::vector<uint8_t> storedHash;
+    if (!ReadFileContent(hashPath, storedHash)) 
+        return -2; // No file
+        
+    if (storedHash.size() != SHA256_DIGEST_LENGTH) 
+        return -3; // Corrupted file
+
+    if (memcmp(computedHash.data(), storedHash.data(), SHA256_DIGEST_LENGTH) != 0) 
+        return -4; // Hash is not correct
+
+    return 0; // Success
+}
 bool CheckKeyValidity(const std::string& keyHex, const std::wstring& hashPath) {
     if (keyHex.length() != AES_256_KEY_SIZE * 2) return false;
 
@@ -153,43 +175,40 @@ bool CheckKeyValidity(const std::string& keyHex, const std::wstring& hashPath) {
         keyBytes[i] = static_cast<uint8_t>(val);
     }
 
-    std::vector<uint8_t> computedHash = ComputeSha256(keyBytes);
+    std::vector<uint8_t> computedHash = ComputeSha256(keyBytes.data(), keyBytes.size());
     std::vector<uint8_t> storedHash;
     if (!ReadFileContent(hashPath, storedHash)) return false;
     if (storedHash.size() != SHA256_DIGEST_LENGTH) return false;
     return memcmp(computedHash.data(), storedHash.data(), SHA256_DIGEST_LENGTH) == 0;
 }
 
-// Wersja do użycia, gdy mamy już SecureBuffer
 bool CheckKeyValidityFromBuffer(const SecureBuffer& key, const std::wstring& hashPath) {
     if (key.size() != AES_256_KEY_SIZE) return false;
-    std::vector<uint8_t> keyBytes(key.data(), key.data() + key.size());
-    std::vector<uint8_t> computedHash = ComputeSha256(keyBytes);
+    
+    std::vector<uint8_t> computedHash = ComputeSha256(key.data(), key.size());
     std::vector<uint8_t> storedHash;
+    
     if (!ReadFileContent(hashPath, storedHash) || storedHash.size() != SHA256_DIGEST_LENGTH)
         return false;
+        
     return memcmp(computedHash.data(), storedHash.data(), SHA256_DIGEST_LENGTH) == 0;
 }
 
-// Stałe ścieżki do plików klucza
 std::wstring GetMasterKeyHashPath() { return GetUserDesktopPath() + L"\\masterkey.sha256"; }
 std::wstring GetMasterKeyEncPath()  { return GetUserDesktopPath() + L"\\masterkey.enc"; }
-// ============================================================================
-// Konwersje
-// ============================================================================
+
 SecureBuffer MasterKeyFromHexWString(const std::wstring& hex) {
     if (hex.length() != AES_256_KEY_SIZE * 2)
         throw std::runtime_error("Invalid hex length – expected 64 characters");
 
     SecureBuffer key(AES_256_KEY_SIZE);
     for (size_t i = 0; i < AES_256_KEY_SIZE; ++i) {
-        wchar_t high = hex[i * 2];
-        wchar_t low  = hex[i * 2 + 1];
+        wchar_t high = std::towupper(hex[i * 2]);
+        wchar_t low  = std::towupper(hex[i * 2 + 1]);
 
         auto hexVal = [](wchar_t c) -> int {
             if (c >= L'0' && c <= L'9') return c - L'0';
             if (c >= L'A' && c <= L'F') return c - L'A' + 10;
-            if (c >= L'a' && c <= L'f') return c - L'a' + 10;
             return -1;
         };
 
@@ -201,6 +220,18 @@ SecureBuffer MasterKeyFromHexWString(const std::wstring& hex) {
         key.data()[i] = static_cast<uint8_t>((h << 4) | l);
     }
     return key;
+}
+
+
+std::wstring SecureBufferToHexWString(const SecureBuffer& key) {
+    std::wstring hex;
+    hex.reserve(key.size() * 2);
+    const wchar_t* hexChars = L"0123456789ABCDEF";
+    for (size_t i = 0; i < key.size(); ++i) {
+        hex.push_back(hexChars[key.data()[i] >> 4]);
+        hex.push_back(hexChars[key.data()[i] & 0x0F]);
+    }
+    return hex;
 }
 
 std::string WStringToString(const std::wstring& wstr) {
