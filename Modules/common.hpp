@@ -163,6 +163,7 @@ SecureBuffer MasterKeyFromHexWString(const std::wstring& hex);
 std::string WStringToString(const std::wstring& wstr);
 std::wstring GetMasterKeyHashPath();
 bool CheckKeyValidityFromBuffer(const SecureBuffer& key, const std::wstring& hashPath);
+int CheckKeyValidityDebug(const SecureBuffer& key, const std::wstring& hashPath);
 std::wstring GetMasterKeyHashPath();
 std::wstring GetMasterKeyEncPath();
 std::wstring GetMarkerFilePath();
